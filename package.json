@@ -29,6 +29,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "given2": "^2.1.7",
     "jest": "^27.4.5",
-    "jest-plugin-context": "^2.9.0"
+    "jest-plugin-context": "^2.9.0",
+    "next-page-tester": "^0.30.0"
   }
 }
