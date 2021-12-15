@@ -38,4 +38,15 @@ describe('Home', () => {
     fireEvent.click(screen.getByText('Delete'));
     expect(screen.queryByText('test')).not.toBeInTheDocument();
   });
+
+  it("completes todo when click 'Complete' button", () => {
+    render(<Home />);
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
+    fireEvent.click(screen.getByText('Add'));
+    expect(screen.getByText('test')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Complete'));
+    expect(screen.getByRole('heading')).toContainHTML('<s>test</s>');
+  });
 });

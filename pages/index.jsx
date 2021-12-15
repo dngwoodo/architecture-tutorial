@@ -13,6 +13,10 @@ export default function Home() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const handleClickComplete = (id) => {
+    setTodos(todos.map((todo) => (id === todo.id ? ({ ...todo, completed: !todo.completed }) : todo)));
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -20,10 +24,11 @@ export default function Home() {
         <button type="submit">Add</button>
       </form>
       <ul>
-        {todos.map(({ id, title: itemTitle }) => (
+        {todos.map(({ id, title: itemTitle, completed }) => (
           <li key={id}>
-            <h2>{itemTitle}</h2>
+            <h2>{completed ? <s>{itemTitle}</s> : itemTitle}</h2>
             <button type="button" onClick={() => handleClickDelete(id)}>Delete</button>
+            <button type="button" onClick={() => handleClickComplete(id)}>Complete</button>
           </li>
         ))}
       </ul>
