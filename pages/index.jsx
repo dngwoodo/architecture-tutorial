@@ -9,6 +9,10 @@ export default function Home() {
     setTodos([...todos, { id: Date.now(), title, completed: false }]);
   };
 
+  const handleClickDelete = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -19,6 +23,7 @@ export default function Home() {
         {todos.map(({ id, title: itemTitle }) => (
           <li key={id}>
             <h2>{itemTitle}</h2>
+            <button type="button" onClick={() => handleClickDelete(id)}>Delete</button>
           </li>
         ))}
       </ul>

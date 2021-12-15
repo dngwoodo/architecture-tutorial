@@ -21,9 +21,21 @@ describe('Home', () => {
   it("adds todo when click 'Add' button", () => {
     render(<Home />);
 
+    expect(screen.queryByText('test')).not.toBeInTheDocument();
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
     fireEvent.click(screen.getByText('Add'));
 
     expect(screen.getByText('test')).toBeInTheDocument();
+  });
+
+  it("deletes todo when click 'Delete' button", () => {
+    render(<Home />);
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
+    fireEvent.click(screen.getByText('Add'));
+    expect(screen.getByText('test')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Delete'));
+    expect(screen.queryByText('test')).not.toBeInTheDocument();
   });
 });
