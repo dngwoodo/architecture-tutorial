@@ -2,7 +2,10 @@ import { useState } from 'react';
 
 import Todos from '../Todos';
 
-export default function TodosContainer() {
+// UI컴포넌트는 하나도 안깨짐.
+// 상태관리 컴포넌트는 깨짐.
+
+export const TodosContainer = () => {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState('');
 
@@ -35,4 +38,6 @@ export default function TodosContainer() {
       onClickDelete={handleClickDelete}
     />
   );
-}
+};
+
+export default TodosContainer;
