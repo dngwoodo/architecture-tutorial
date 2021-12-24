@@ -1,43 +1,42 @@
-import { useState } from 'react';
+import { observer } from 'mobx-react';
+
+import TodosStore from '../../../../store';
 
 import Todos from '../Todos';
 
 // UI컴포넌트는 하나도 안깨짐.
 // 상태관리 컴포넌트는 깨짐.
 
-export const TodosContainer = () => {
-  const [todos, setTodos] = useState([]);
-  const [title, setTitle] = useState('');
+const TodosContainer = observer(() => {
+  const todosStore = new TodosStore();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTodos([...todos, { id: Date.now(), title, completed: false }]);
+    todosStore.addTodo({ title: todosStore.title, completed: false });
   };
 
   const handleClickDelete = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    todosStore.deleteTodo(id);
   };
 
   const handleClickComplete = (id) => {
-    setTodos(
-      todos.map((todo) => (id === todo.id ? ({ ...todo, completed: !todo.completed }) : todo)),
-    );
+    todosStore.completeTodo(id);
   };
 
   const handleChangeTitle = (newTitle) => {
-    setTitle(newTitle);
+    todosStore.changeTitle(newTitle);
   };
 
   return (
     <Todos
-      title={title}
+      title={todosStore.title}
       onChangeTitle={handleChangeTitle}
-      todos={todos}
+      todos={todosStore.todos}
       onSubmit={handleSubmit}
       onClickComplete={handleClickComplete}
       onClickDelete={handleClickDelete}
     />
   );
-};
+});
 
 export default TodosContainer;

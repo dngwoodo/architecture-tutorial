@@ -1,20 +1,22 @@
 import { makeAutoObservable } from 'mobx';
 
-class Todos {
-  constructor(todos, title) {
+class TodosStore {
+  constructor(todos = [], title = '') {
     // 등록시킨값을 관찰대상으로 만들어줌.
     makeAutoObservable(this, {
-      todos: [],
-      title: '',
+      todos,
+      title,
     });
 
+    this.newId = 100;
     this.todos = todos;
     this.title = title;
   }
 
   // action = 상태를 변경하는 메소드들
-  addTodos = (newTodo) => {
-    this.todos = [...this.todos, newTodo];
+  addTodo = (newTodo) => {
+    this.newId += 1;
+    this.todos = [...this.todos, { id: this.this.newId, ...newTodo }];
   };
 
   deleteTodo = (id) => {
@@ -37,4 +39,4 @@ class Todos {
   }
 }
 
-export default Todos;
+export default TodosStore;

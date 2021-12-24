@@ -1,8 +1,36 @@
 import { fireEvent, screen, render } from '@testing-library/react';
 
+import TodosStore from '../../../../store';
+
 import TodosContainer from '.';
 
+jest.mock('../../../../store');
+
 describe('TodoContainer', () => {
+  const changeTitle = jest.fn();
+  const addTodo = jest.fn();
+  const deleteTodo = jest.fn();
+  const completeTodo = jest.fn();
+
+  beforeEach(() => {
+    changeTitle.mockClear();
+    addTodo.mockClear();
+    deleteTodo.mockClear();
+    completeTodo.mockClear();
+
+    TodosStore.mockImplementation(() => ({
+      todos: [
+        { id: 1, title: '아무것도 안하기', completed: false },
+        { id: 2, title: '아무것도 안하기2', completed: true },
+      ],
+      title: 'test',
+      changeTitle,
+      addTodo,
+      deleteTodo,
+      completeTodo,
+    }));
+  });
+
   it('renders button and input', () => {
     render(<TodosContainer />);
 
@@ -10,35 +38,35 @@ describe('TodoContainer', () => {
     expect(screen.getByText('Add')).toBeInTheDocument();
   });
 
-  it("adds todo when click 'Add' button", () => {
+  it('calls changeTitle when change input', () => {
     render(<TodosContainer />);
 
-    expect(screen.queryByText('test')).not.toBeInTheDocument();
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
-    fireEvent.click(screen.getByText('Add'));
+    // 값이 동일하면 change event 발동이 안된다.
+    // userEvent 라이브러리 쓰셔야 된다. userEvent.type();
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'aaa' } });
 
-    expect(screen.getByText('test')).toBeInTheDocument();
+    expect(changeTitle).toBeCalledWith('aaa');
   });
 
-  it("deletes todo when click 'Delete' button", () => {
+  it("calls addTodo when click 'Add' button", () => {
     render(<TodosContainer />);
 
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
     fireEvent.click(screen.getByText('Add'));
-    expect(screen.getByText('test')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Delete'));
-    expect(screen.queryByText('test')).not.toBeInTheDocument();
+    expect(addTodo).toBeCalledWith({ title: 'test', completed: false });
   });
 
-  it("completes todo when click 'Complete' button", () => {
+  it("calls deleteTodo when click 'Delete' button", () => {
     render(<TodosContainer />);
 
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
-    fireEvent.click(screen.getByText('Add'));
-    expect(screen.getByText('test')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByText('Delete')[0]);
+    expect(deleteTodo).toBeCalledWith(1);
+  });
 
-    fireEvent.click(screen.getByText('Complete'));
-    expect(screen.getByRole('heading')).toContainHTML('<s>test</s>');
+  it("calls completeTodo when click 'Complete' button", () => {
+    render(<TodosContainer />);
+
+    fireEvent.click(screen.getAllByText('Complete')[0]);
+    expect(completeTodo).toBeCalled();
   });
 });
