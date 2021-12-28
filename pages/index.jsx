@@ -1,7 +1,7 @@
-import TodosContainer from '../components/pages/Home/TodosContainer';
+import Todos from '../components/pages/Home/Todos';
 
 export default function Home() {
   return (
-    <TodosContainer />
+    <Todos />
   );
 }

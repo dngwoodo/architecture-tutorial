@@ -3,14 +3,11 @@ import { makeAutoObservable } from 'mobx';
 class TodosStore {
   constructor(todos = [], title = '') {
     // 등록시킨값을 관찰대상으로 만들어줌.
-    makeAutoObservable(this, {
-      todos,
-      title,
-    });
-
     this.newId = 100;
     this.todos = todos;
     this.title = title;
+
+    makeAutoObservable(this);
   }
 
   // action = 상태를 변경하는 메소드들
@@ -42,4 +39,6 @@ class TodosStore {
   }
 }
 
-export default TodosStore;
+const todosStore = new TodosStore();
+
+export default todosStore;
