@@ -1,9 +1,12 @@
 import {
   fireEvent, screen, render,
 } from '@testing-library/react';
-
 import given from 'given2';
+
 import Todos from '.';
+import useTodosViewModel from './useTodosViewModel';
+
+jest.mock('./useTodosViewModel', () => jest.fn());
 
 describe('Todos', () => {
   const handleSubmit = jest.fn((event) => event.preventDefault());
@@ -11,18 +14,18 @@ describe('Todos', () => {
   const handleClickDelete = jest.fn();
   const handleChangeTitle = jest.fn();
 
-  const renderTodos = () => render(
-    <Todos
-      title={given.title}
-      todos={given.todos}
-      onSubmit={handleSubmit}
-      onClickComplete={handleClickComplete}
-      onClickDelete={handleClickDelete}
-      onChangeTitle={handleChangeTitle}
-    />,
-  );
+  const renderTodos = () => render(<Todos />);
 
   beforeEach(() => {
+    useTodosViewModel.mockImplementation(() => ({
+      title: given.title,
+      todos: given.todos,
+      onSubmit: handleSubmit,
+      onClickDelete: handleClickDelete,
+      onClickComplete: handleClickComplete,
+      onChangeTitle: handleChangeTitle,
+    }));
+
     handleSubmit.mockClear();
     handleClickComplete.mockClear();
     handleClickDelete.mockClear();

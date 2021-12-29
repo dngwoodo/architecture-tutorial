@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-class TodosStore {
+export class TodosStore {
   constructor(todos = [], title = '') {
     // 등록시킨값을 관찰대상으로 만들어줌.
     this.newId = 100;

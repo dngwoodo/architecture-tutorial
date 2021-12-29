@@ -1,34 +1,36 @@
-import TodoStore from '.';
+import { TodosStore } from '.';
 
 describe('TodosStore', () => {
+  let todosStore;
+  beforeEach(() => {
+    todosStore = new TodosStore();
+  });
+
   it('returns initial state', () => {
-    const todoStore = new TodoStore();
-    expect(todoStore).toHaveProperty('newId', 100);
+    expect(todosStore).toHaveProperty('newId', 100);
   });
 
   it('adds todo', () => {
-    const todoStore = new TodoStore();
+    todosStore.addTodo({ title: 'test', completed: false });
 
-    todoStore.addTodo({ title: 'test', completed: false });
-
-    expect(todoStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
+    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
   });
 
   it('deletes todo', () => {
-    const todoStore = new TodoStore([{ id: 100, title: 'test', completed: false }]);
+    todosStore.addTodo([{ id: 100, title: 'test', completed: false }]);
 
-    todoStore.deleteTodo(100);
+    todosStore.deleteTodo(100);
 
-    expect(todoStore.todos).toEqual([]);
+    expect(todosStore.todos).toEqual([]);
   });
 
   it('completes todo', () => {
-    const todoStore = new TodoStore([{ id: 100, title: 'test', completed: false }]);
+    todosStore.addTodo({ id: 100, title: 'test', completed: false });
 
-    todoStore.completeTodo(100);
-    expect(todoStore.todos).toEqual([{ id: 100, title: 'test', completed: true }]);
+    todosStore.completeTodo(100);
+    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: true }]);
 
-    todoStore.completeTodo(100);
-    expect(todoStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
+    todosStore.completeTodo(100);
+    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
   });
 });
