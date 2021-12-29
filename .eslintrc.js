@@ -26,5 +26,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'func-names': 'off',
     'react/function-component-definition': 'off',
+    'no-new': 'off',
   },
 };
