@@ -3,18 +3,20 @@ export default class TodosRepository {
     this.baseURL = 'http://localhost:5000';
   }
 
-  getTodo() {
-    return fetch(`${this.baseURL}/todo`, {
+  async getTodo() {
+    const data = await fetch(`${this.baseURL}/todos`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
+
+    return data.json();
   }
 
   createTodo(newTodo) {
     return fetch(`${this.baseURL}/todo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: { newTodo },
+      body: JSON.stringify({ newTodo }),
     });
   }
 
@@ -22,7 +24,7 @@ export default class TodosRepository {
     return fetch(`${this.baseURL}/todo`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: { id },
+      body: JSON.stringify({ id }),
     });
   }
 
@@ -30,7 +32,7 @@ export default class TodosRepository {
     return fetch(`${this.baseURL}/todo`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: { id },
+      body: JSON.stringify({ id }),
     });
   }
 }

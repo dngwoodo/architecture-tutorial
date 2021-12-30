@@ -2,35 +2,48 @@ import { TodosStore } from '.';
 
 describe('TodosStore', () => {
   let todosStore;
+  const getTodo = jest.fn();
+  const createTodo = jest.fn();
+  const deleteTodo = jest.fn();
+  const completeTodo = jest.fn();
+
   beforeEach(() => {
-    todosStore = new TodosStore();
+    todosStore = new TodosStore({
+      getTodo,
+      createTodo,
+      deleteTodo,
+      completeTodo,
+    });
   });
 
-  it('returns initial state', () => {
-    expect(todosStore).toHaveProperty('newId', 100);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('adds todo', () => {
-    todosStore.addTodo({ title: 'test', completed: false });
+  it('loads todos', async () => {
+    await todosStore.loadTodo();
 
-    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
+    expect(getTodo).toBeCalled();
   });
 
-  it('deletes todo', () => {
-    todosStore.addTodo([{ id: 100, title: 'test', completed: false }]);
+  it('adds todo', async () => {
+    await todosStore.addTodo({ title: 'test' });
 
-    todosStore.deleteTodo(100);
-
-    expect(todosStore.todos).toEqual([]);
+    expect(createTodo).toBeCalledWith({ title: 'test' });
+    expect(getTodo).toBeCalled();
   });
 
-  it('completes todo', () => {
-    todosStore.addTodo({ id: 100, title: 'test', completed: false });
+  it('deletes todo', async () => {
+    await todosStore.deleteTodo(100);
 
-    todosStore.completeTodo(100);
-    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: true }]);
+    expect(deleteTodo).toBeCalledWith(100);
+    expect(getTodo).toBeCalled();
+  });
 
-    todosStore.completeTodo(100);
-    expect(todosStore.todos).toEqual([{ id: 100, title: 'test', completed: false }]);
+  it('completes todo', async () => {
+    await todosStore.completeTodo(100);
+
+    expect(completeTodo).toBeCalledWith(100);
+    expect(getTodo).toBeCalled();
   });
 });

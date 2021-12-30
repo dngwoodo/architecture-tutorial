@@ -1,3 +1,5 @@
+import TodosRepository from '../repository';
+
 export default class TodosService {
   // repository 받아서 사용하게 되면 service에 대한 mock처리가 필요가 없어진다.,
   // 왜냐하면 repository에 stub울 넣으면 되기 떄문에.
@@ -22,3 +24,7 @@ export default class TodosService {
     return this.repository.completeTodo(id);
   }
 }
+
+const todosService = new TodosService(new TodosRepository());
+
+export { todosService };

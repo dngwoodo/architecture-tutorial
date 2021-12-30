@@ -1,32 +1,39 @@
 import { makeAutoObservable } from 'mobx';
 
+// 이렇게 하게 되면 모킹이 제대로 되지 않는다.
+// 이유는 불명. 찾지못함.
+// const todosService = new TodosService(new TodosRepository());
+
+// const store = new TodosStore(new TodosService(new TodosRepository()));
+
 export class TodosStore {
-  constructor(todos = [], title = '') {
+  constructor(todosService) {
     // 등록시킨값을 관찰대상으로 만들어줌.
-    this.newId = 100;
-    this.todos = todos;
-    this.title = title;
+    this.todos = [];
+    this.title = '';
+    this.todosService = todosService;
 
     makeAutoObservable(this);
   }
 
+  loadTodo = async () => {
+    this.todos = await this.todosService.getTodo();
+  };
+
   // action = 상태를 변경하는 메소드들
-  addTodo = (newTodo) => {
-    this.todos = [...this.todos, { id: this.newId, ...newTodo }];
-
-    // newId 해당 클래스에서 사용하는
-    // private 변수이기 때문에 테스트를 작성하지 않는다.
-    this.newId += 1;
+  addTodo = async (newTodo) => {
+    await this.todosService.createTodo(newTodo);
+    this.todos = await this.todosService.getTodo();
   };
 
-  deleteTodo = (id) => {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+  deleteTodo = async (id) => {
+    await this.todosService.deleteTodo(id);
+    this.todos = await this.todosService.getTodo();
   };
 
-  completeTodo = (id) => {
-    this.todos = this.todos.map(
-      (todo) => (id === todo.id ? ({ ...todo, completed: !todo.completed }) : todo),
-    );
+  completeTodo = async (id) => {
+    await this.todosService.completeTodo(id);
+    this.todos = await this.todosService.getTodo();
   };
 
   changeTitle = (newTitle) => {
