@@ -1,6 +1,5 @@
 export default class TodosPresenter {
   constructor(todos, title, service) {
-    // 등록시킨값을 관찰대상으로 만들어줌.
     this.todos = todos;
     this.title = title;
     this.service = service;
@@ -8,7 +7,6 @@ export default class TodosPresenter {
 
   getTodos = () => this.todos;
 
-  // action = 상태를 변경하는 메소드들
   addTodo = (newTodo, update) => {
     this.todos = [...this.todos, { id: Date.now(), completed: false, ...newTodo }];
     update(this.todos);
