@@ -1,12 +1,21 @@
 import { observer } from 'mobx-react';
+import { useEffect, useContext } from 'react';
 
+import PresenterContext from '../../../../pages/presenterContext';
 import useTodosViewModel from './useTodosViewModel';
 
 const Todos = observer(() => {
+  const { todosPresenter } = useContext(PresenterContext);
+
   const {
     title, todos,
     onSubmit, onClickDelete, onClickComplete, onChangeTitle,
-  } = useTodosViewModel();
+    loadTodos,
+  } = useTodosViewModel({ todosPresenter });
+
+  useEffect(() => {
+    loadTodos();
+  }, [loadTodos]);
 
   return (
     <div>

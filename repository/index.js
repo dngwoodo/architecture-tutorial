@@ -3,7 +3,7 @@ export default class TodosRepository {
     this.baseURL = 'http://localhost:5000';
   }
 
-  async getTodo() {
+  async getTodos() {
     const data = await fetch(`${this.baseURL}/todos`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

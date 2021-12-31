@@ -8,9 +8,9 @@ describe('TodosService', () => {
     const stubTodosRepository = new TodosRepository();
     const todosService = new TodosService(stubTodosRepository);
 
-    todosService.getTodo();
+    todosService.getTodos();
 
-    expect(stubTodosRepository.getTodo).toBeCalledWith();
+    expect(stubTodosRepository.getTodos).toBeCalled();
   });
 
   it('calls repository\'s creatTodo', () => {

@@ -8,8 +8,8 @@ export default class TodosService {
     this.repository = repository;
   }
 
-  getTodo() {
-    return this.repository.getTodo();
+  getTodos() {
+    return this.repository.getTodos();
   }
 
   createTodo(newTodo) {

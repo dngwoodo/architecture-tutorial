@@ -13,6 +13,7 @@ describe('Todos', () => {
   const handleClickComplete = jest.fn();
   const handleClickDelete = jest.fn();
   const handleChangeTitle = jest.fn();
+  const loadTodos = jest.fn();
 
   const renderTodos = () => render(<Todos />);
 
@@ -24,12 +25,14 @@ describe('Todos', () => {
       onClickDelete: handleClickDelete,
       onClickComplete: handleClickComplete,
       onChangeTitle: handleChangeTitle,
+      loadTodos,
     }));
 
     handleSubmit.mockClear();
     handleClickComplete.mockClear();
     handleClickDelete.mockClear();
     handleChangeTitle.mockClear();
+    loadTodos.mockClear();
 
     given('title', () => '');
     given('todos', () => [
