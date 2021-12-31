@@ -1,15 +1,15 @@
-import { TodosStore } from '.';
+import TodosStore from '.';
 
 describe('TodosStore', () => {
   let todosStore;
-  const getTodo = jest.fn();
+  const getTodos = jest.fn();
   const createTodo = jest.fn();
   const deleteTodo = jest.fn();
   const completeTodo = jest.fn();
 
   beforeEach(() => {
     todosStore = new TodosStore({
-      getTodo,
+      getTodos,
       createTodo,
       deleteTodo,
       completeTodo,
@@ -21,29 +21,29 @@ describe('TodosStore', () => {
   });
 
   it('loads todos', async () => {
-    await todosStore.loadTodo();
+    await todosStore.loadTodos();
 
-    expect(getTodo).toBeCalled();
+    expect(getTodos).toBeCalled();
   });
 
   it('adds todo', async () => {
-    await todosStore.addTodo({ title: 'test' });
+    await todosStore.addTodo();
 
-    expect(createTodo).toBeCalledWith({ title: 'test' });
-    expect(getTodo).toBeCalled();
+    expect(createTodo).toBeCalledWith({ title: todosStore.title });
+    expect(getTodos).toBeCalled();
   });
 
   it('deletes todo', async () => {
     await todosStore.deleteTodo(100);
 
     expect(deleteTodo).toBeCalledWith(100);
-    expect(getTodo).toBeCalled();
+    expect(getTodos).toBeCalled();
   });
 
   it('completes todo', async () => {
     await todosStore.completeTodo(100);
 
     expect(completeTodo).toBeCalledWith(100);
-    expect(getTodo).toBeCalled();
+    expect(getTodos).toBeCalled();
   });
 });

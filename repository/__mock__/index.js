@@ -14,11 +14,11 @@ export default class TodosRepository {
     this.baseURL = 'http://localhost:5000';
   }
 
-  static getTodo() {
+  static getTodos() {
     return {};
   }
 
-  static createTodo(newTodo) {
+  static createTodo() {
     return {};
   }
 

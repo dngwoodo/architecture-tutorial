@@ -1,12 +1,18 @@
+import { useContext } from 'react';
+
 import { observer } from 'mobx-react';
+
+import StoreContext from '../../../../pages/storeContext';
 
 import useTodosViewModel from './useTodosViewModel';
 
 const Todos = observer(() => {
+  const { todosStore } = useContext(StoreContext);
+
   const {
     title, todos,
     onSubmit, onClickDelete, onClickComplete, onChangeTitle,
-  } = useTodosViewModel();
+  } = useTodosViewModel({ todosStore });
 
   return (
     <div>

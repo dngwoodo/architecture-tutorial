@@ -4,13 +4,13 @@ import TodosRepository from '../repository';
 jest.mock('../repository');
 
 describe('TodosService', () => {
-  it('calls repository\'s getTodo', () => {
+  it('calls repository\'s getTodos', () => {
     const stubTodosRepository = new TodosRepository();
     const todosService = new TodosService(stubTodosRepository);
 
-    todosService.getTodo();
+    todosService.getTodos();
 
-    expect(stubTodosRepository.getTodo).toBeCalledWith();
+    expect(stubTodosRepository.getTodos).toBeCalledWith();
   });
 
   it('calls repository\'s creatTodo', () => {

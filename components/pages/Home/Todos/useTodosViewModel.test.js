@@ -1,69 +1,70 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 
-import todosStore from '../../../../store';
 import useTodosViewModel from './useTodosViewModel';
 
 jest.mock('../../../../store', () => jest.fn());
 
 describe('useTodosViewModel', () => {
-  let hook;
-  todosStore.title = '123';
-  todosStore.addTodo = jest.fn();
-  todosStore.completeTodo = jest.fn();
-  todosStore.deleteTodo = jest.fn();
-  todosStore.changeTitle = jest.fn();
+  let result;
+  let todosStore;
+  const addTodo = jest.fn();
+  const completeTodo = jest.fn();
+  const deleteTodo = jest.fn();
+  const changeTitle = jest.fn();
 
   beforeEach(() => {
-    hook = renderHook(() => useTodosViewModel());
+    todosStore = {
+      title: '',
+      addTodo,
+      completeTodo,
+      deleteTodo,
+      changeTitle,
+    };
 
-    todosStore.addTodo.mockClear();
-    todosStore.completeTodo.mockClear();
-    todosStore.deleteTodo.mockClear();
-    todosStore.changeTitle.mockClear();
+    ({ result } = renderHook(() => useTodosViewModel({ todosStore })));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('onSubmit', () => {
     it('calls addTodo', () => {
-      const { result } = hook;
       act(() => {
         result.current.onSubmit({ preventDefault: jest.fn() });
       });
 
-      expect(todosStore.addTodo).toBeCalledWith({ title: '123', completed: false });
+      expect(addTodo).toBeCalledTimes(1);
     });
   });
 
   describe('onClickDelete', () => {
     it('calls deleteTodo', () => {
-      const { result } = hook;
-      const targetId = 100;
       act(() => {
-        result.current.onClickDelete(targetId);
+        result.current.onClickDelete(100);
       });
 
-      expect(todosStore.deleteTodo).toBeCalledWith(targetId);
+      expect(deleteTodo).toBeCalledWith(100);
     });
   });
 
   describe('onClickComplete', () => {
     it('calls completeTodo', () => {
-      const { result } = hook;
-      const targetId = 100;
       act(() => {
-        result.current.onClickComplete(targetId);
+        result.current.onClickComplete(100);
       });
 
-      expect(todosStore.completeTodo).toBeCalledWith(targetId);
+      expect(completeTodo).toBeCalledWith(100);
     });
   });
 
   describe('onChangeTitle', () => {
     it('calls changeTitle', () => {
       act(() => {
-        hook.result.current.onChangeTitle('test');
+        result.current.onChangeTitle('test');
       });
 
-      expect(todosStore.changeTitle).toBeCalledWith('test');
+      expect(changeTitle).toBeCalledWith('test');
     });
   });
 });

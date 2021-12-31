@@ -1,14 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 
-// 이렇게 하게 되면 모킹이 제대로 되지 않는다.
-// 이유는 불명. 찾지못함.
+// 의존성 주입을 하지 않고 이렇게 하게 되면 모킹이 제대로 되지 않는다. 이유를 찾지 못함.
 // const todosService = new TodosService(new TodosRepository());
-
-// const store = new TodosStore(new TodosService(new TodosRepository()));
 
 export default class TodosStore {
   constructor(todosService) {
-    // 등록시킨값을 관찰대상으로 만들어줌.
     this.todos = [];
     this.title = '';
     this.todosService = todosService;
@@ -16,32 +12,26 @@ export default class TodosStore {
     makeAutoObservable(this);
   }
 
-  loadTodo = async () => {
-    this.todos = await this.todosService.getTodo();
+  loadTodos = async () => {
+    this.todos = await this.todosService.getTodos();
   };
 
-  // action = 상태를 변경하는 메소드들
-  addTodo = async (newTodo) => {
-    await this.todosService.createTodo(newTodo);
-    this.todos = await this.todosService.getTodo();
+  addTodo = async () => {
+    await this.todosService.createTodo({ title: this.title });
+    this.todos = await this.todosService.getTodos();
   };
 
   deleteTodo = async (id) => {
     await this.todosService.deleteTodo(id);
-    this.todos = await this.todosService.getTodo();
+    this.todos = await this.todosService.getTodos();
   };
 
   completeTodo = async (id) => {
     await this.todosService.completeTodo(id);
-    this.todos = await this.todosService.getTodo();
+    this.todos = await this.todosService.getTodos();
   };
 
   changeTitle = (newTitle) => {
     this.title = newTitle;
   };
-
-  // computed
-  get emptyTitleTodo() {
-    return this.todos.filter((todo) => todo.title === '');
-  }
 }
