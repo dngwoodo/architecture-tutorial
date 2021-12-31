@@ -1,4 +1,7 @@
-import todosStore from '../../../../store';
+import { useRef } from 'react';
+import TodosStore from '../../../../store';
+import TodosService from '../../../../service';
+import TodosRepository from '../../../../repository';
 
 // 리온
 // 재사용성을 위한 hook에서는 useEffect를 사용하지 않는 것이 좋을 것 같다.
@@ -26,27 +29,31 @@ import todosStore from '../../../../store';
 //   }
 // }
 
+// context로 뱃을때 테스트코드 전부 작성. 그렇죠. 아그리고 page마다 provider에 적어줘야함.
+// ts로 넘어가고 typedi 테스트코드 작성
 export default function useTodosViewModel() {
+  const todosStoreRef = useRef(new TodosStore(new TodosService(new TodosRepository())));
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    todosStore.addTodo({ title: todosStore.title, completed: false });
+    todosStoreRef.current.addTodo({ title: todosStoreRef.current.title });
   };
 
   const handleClickDelete = (id) => {
-    todosStore.deleteTodo(id);
+    todosStoreRef.current.deleteTodo(id);
   };
 
   const handleClickComplete = (id) => {
-    todosStore.completeTodo(id);
+    todosStoreRef.current.completeTodo(id);
   };
 
   const handleChangeTitle = (newTitle) => {
-    todosStore.changeTitle(newTitle);
+    todosStoreRef.current.changeTitle(newTitle);
   };
 
   return {
-    title: todosStore.title,
-    todos: todosStore.todos,
+    title: todosStoreRef.current.title,
+    todos: todosStoreRef.current.todos,
     onSubmit: handleSubmit,
     onClickDelete: handleClickDelete,
     onClickComplete: handleClickComplete,

@@ -6,7 +6,7 @@ import { makeAutoObservable } from 'mobx';
 
 // const store = new TodosStore(new TodosService(new TodosRepository()));
 
-export class TodosStore {
+export default class TodosStore {
   constructor(todosService) {
     // 등록시킨값을 관찰대상으로 만들어줌.
     this.todos = [];
@@ -45,7 +45,3 @@ export class TodosStore {
     return this.todos.filter((todo) => todo.title === '');
   }
 }
-
-const todosStore = new TodosStore();
-
-export default todosStore;
