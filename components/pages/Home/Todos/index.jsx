@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import { observer } from 'mobx-react';
 
@@ -12,7 +12,12 @@ const Todos = observer(() => {
   const {
     title, todos,
     onSubmit, onClickDelete, onClickComplete, onChangeTitle,
+    loadTodos,
   } = useTodosViewModel({ todosStore });
+
+  useEffect(() => {
+    loadTodos();
+  }, [loadTodos]);
 
   return (
     <div>

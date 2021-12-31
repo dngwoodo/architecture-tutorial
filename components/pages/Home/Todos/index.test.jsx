@@ -13,8 +13,7 @@ describe('Todos', () => {
   const handleClickComplete = jest.fn();
   const handleClickDelete = jest.fn();
   const handleChangeTitle = jest.fn();
-
-  const renderTodos = () => render(<Todos />);
+  const loadTodos = jest.fn();
 
   beforeEach(() => {
     useTodosViewModel.mockImplementation(() => ({
@@ -24,12 +23,8 @@ describe('Todos', () => {
       onClickDelete: handleClickDelete,
       onClickComplete: handleClickComplete,
       onChangeTitle: handleChangeTitle,
+      loadTodos,
     }));
-
-    handleSubmit.mockClear();
-    handleClickComplete.mockClear();
-    handleClickDelete.mockClear();
-    handleChangeTitle.mockClear();
 
     given('title', () => '');
     given('todos', () => [
@@ -39,48 +34,46 @@ describe('Todos', () => {
         completed: false,
       },
     ]);
+
+    render(<Todos />);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('renders button and input', () => {
-    renderTodos();
-
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.getByText('Add')).toBeInTheDocument();
   });
 
-  it('renders todo', () => {
-    renderTodos();
-
+  it('renders todos', () => {
     expect(screen.getByRole('heading', { name: 'test' })).toBeInTheDocument();
   });
 
-  it('listens submit event', () => {
-    renderTodos();
+  it('calls loadTodos', () => {
+    expect(loadTodos).toBeCalledTimes(1);
+  });
 
+  it('listens submit event', () => {
     fireEvent.click(screen.getByText('Add'));
 
-    expect(handleSubmit).toHaveBeenCalled();
+    expect(handleSubmit).toBeCalled();
   });
 
-  it('listens submit complete click event', () => {
-    renderTodos();
-
+  it('listens complete click event', () => {
     fireEvent.click(screen.getByText('Complete'));
 
-    expect(handleClickComplete).toHaveBeenCalled();
+    expect(handleClickComplete).toBeCalled();
   });
 
-  it('listens submit delete click event', () => {
-    renderTodos();
-
+  it('listens delete click event', () => {
     fireEvent.click(screen.getByText('Delete'));
 
-    expect(handleClickDelete).toHaveBeenCalled();
+    expect(handleClickDelete).toBeCalled();
   });
 
   it('listens change event', () => {
-    renderTodos();
-
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'test' } });
 
     expect(handleChangeTitle).toBeCalledWith('test');

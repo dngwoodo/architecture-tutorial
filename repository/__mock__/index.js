@@ -1,14 +1,3 @@
-// // 방법 1
-// const TodosRepository = jest.fn().mockImplementation(() => ({
-//   getTodo: jest.fn(),
-//   createTodo: jest.fn(),
-//   deleteTodo: jest.fn(),
-//   completeTodo: jest.fn(),
-// }));
-
-// export default TodosRepository;
-
-// 방법2
 export default class TodosRepository {
   constructor() {
     this.baseURL = 'http://localhost:5000';

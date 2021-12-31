@@ -11,6 +11,7 @@ describe('useTodosViewModel', () => {
   const completeTodo = jest.fn();
   const deleteTodo = jest.fn();
   const changeTitle = jest.fn();
+  const loadTodos = jest.fn();
 
   beforeEach(() => {
     todosStore = {
@@ -19,6 +20,7 @@ describe('useTodosViewModel', () => {
       completeTodo,
       deleteTodo,
       changeTitle,
+      loadTodos,
     };
 
     ({ result } = renderHook(() => useTodosViewModel({ todosStore })));
@@ -65,6 +67,16 @@ describe('useTodosViewModel', () => {
       });
 
       expect(changeTitle).toBeCalledWith('test');
+    });
+  });
+
+  describe('loadTodos', () => {
+    it('calls loadTodos', () => {
+      act(() => {
+        result.current.loadTodos();
+      });
+
+      expect(loadTodos).toBeCalledTimes(1);
     });
   });
 });

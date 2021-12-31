@@ -10,13 +10,13 @@ describe('TodosService', () => {
 
     todosService.getTodos();
 
-    expect(stubTodosRepository.getTodos).toBeCalledWith();
+    expect(stubTodosRepository.getTodos).toBeCalled();
   });
 
   it('calls repository\'s creatTodo', () => {
     const stubTodosRepository = new TodosRepository();
     const todosService = new TodosService(stubTodosRepository);
-    const newTodo = { id: 100, title: '123', compeleted: false };
+    const newTodo = { title: '123' };
 
     todosService.createTodo(newTodo);
 
