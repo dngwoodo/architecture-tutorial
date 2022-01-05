@@ -4,34 +4,40 @@ import { makeAutoObservable } from 'mobx';
 // const todosService = new TodosService(new TodosRepository());
 
 export default class TodosStore {
-  constructor(todosService) {
+  constructor({ presenter }) {
     this.todos = [];
     this.title = '';
-    this.todosService = todosService;
+    this.presenter = presenter;
 
     makeAutoObservable(this);
   }
 
   loadTodos = async () => {
-    this.todos = await this.todosService.getTodos();
+    this.todos = this.presenter.todos;
   };
 
   addTodo = async () => {
-    await this.todosService.createTodo({ title: this.title });
-    this.todos = await this.todosService.getTodos();
+    this.presenter.addTodo({ title: this.title }, ({ todos, title }) => {
+      this.todos = todos;
+      this.title = title;
+    });
   };
 
   deleteTodo = async (id) => {
-    await this.todosService.deleteTodo(id);
-    this.todos = await this.todosService.getTodos();
+    this.presenter.deleteTodo(id, (todos) => {
+      this.todos = todos;
+    });
   };
 
   completeTodo = async (id) => {
-    await this.todosService.completeTodo(id);
-    this.todos = await this.todosService.getTodos();
+    this.presenter.completeTodo(id, (todos) => {
+      this.todos = todos;
+    });
   };
 
   changeTitle = (newTitle) => {
-    this.title = newTitle;
+    this.presenter.changeTitle(newTitle, (title) => {
+      this.title = title;
+    });
   };
 }
